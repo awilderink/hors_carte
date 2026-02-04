@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Kitchen Ticket</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap');
+
+    :root {
+      /* Set these to EXACTLY what WebpageScreenshot renders */
+      --w: 768;
+      --h: 1024;
+
+      /* Reference width the typography was designed for */
+      --ref-w: 1242;
+
+      /* scale factor = w/ref-w */
+      --s: calc(var(--w) / var(--ref-w));
+
+      --paper: transparent;
+      --ink: #111;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      overflow: hidden;
+      font-family: "Courier New", Courier, monospace;
+      color: var(--ink);
+    }
+
+    .page {
+      width: calc(var(--w) * 1px);
+      height: calc(var(--h) * 1px);
+      box-sizing: border-box;
+      padding: calc(80px * var(--s)) calc(80px * var(--s)) calc(90px * var(--s));
+      background: var(--paper);
+    }
+
+    .title {
+      font-family: "Cutive Mono", monospace;
+      text-align: center;
+      font-size: calc(64px * var(--s));
+      letter-spacing: calc(1px * var(--s));
+      margin: 0 0 calc(18px * var(--s)) 0;
+    }
+
+    .rule {
+      font-size: calc(40px * var(--s));
+      line-height: 1;
+      opacity: 0.75;
+      margin: calc(22px * var(--s)) 0;
+      white-space: pre;
+    }
+
+    .label {
+      font-size: calc(52px * var(--s));
+      margin: calc(10px * var(--s)) 0;
+    }
+
+    .lineup {
+      font-size: calc(56px * var(--s));
+      line-height: 1.35;
+      margin-top: calc(10px * var(--s));
+      white-space: pre-line;
+    }
+
+    .logoWrap {
+      margin-top: calc(55px * var(--s));
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo {
+      /* Adjust this to taste */
+      width: calc(150px * var(--s));
+      height: auto;
+    }
+
+    .footer {
+      font-family: "Cutive Mono", monospace;
+      margin-top: calc(18px * var(--s));
+      text-align: center;
+      font-size: calc(52px * var(--s));
+    }
+
+    .center {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="title" id="title"></div>
+    <div class="rule">-------------------------------------------</div>
+
+    <div class="label" id="date"></div>
+    <div class="rule">-------------------------------------------</div>
+    
+    <div class="label" id="venue"></div>
+    <div class="rule">-------------------------------------------</div>
+
+    <div class="label">LINE UP:</div>
+    <div class="lineup" id="lineup"></div>
+
+    <div class="logoWrap">
+      <img class="logo" id="logo" src="./branding/logo.jpeg" alt="logo" />
+    </div>
+
+    <div class="footer title" id="footerTitle"></div>
+    <div class="rule">-------------------------------------------</div>
+
+    <div class="label center" id="orderDue"></div>
+  </div>
+
+  <script>
+    async function loadEvent() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        // Default to '01' if no event parameter is provided
+        const eventId = urlParams.get('event') || '01';
+        
+        const response = await fetch(`./events/${eventId}.json`);
+        if (!response.ok) {
+          throw new Error(`Failed to load event data for ID: ${eventId}`);
+        }
+        const data = await response.json();
+
+        document.getElementById('title').textContent = data.title;
+        document.getElementById('venue').textContent = `VENUE: ${data.venue}`;
+        document.getElementById('date').textContent = `DATE: ${data.date}`;
+        document.getElementById('lineup').textContent = data.lineup.join('\n');
+        // Logo is now hardcoded in HTML
+        document.getElementById('footerTitle').textContent = data.footerTitle;
+        document.getElementById('orderDue').textContent = `- ORDER DUE: ${data.orderDue} -`;
+        document.title = data.title;
+      } catch (error) {
+        console.error('Error loading event data:', error);
+        document.body.innerHTML = `<div style="padding: 20px; color: red;">Error: ${error.message}<br>Usage: ?event=01</div>`;
+      }
+    }
+
+    loadEvent();
+  </script>
+</body>
+
+</html>
