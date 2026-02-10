@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "Cutive Mono", monospace;
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #eee;
+  color: #111;
+  font-family: var(--font-mono);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Ticket Scaling Logic - Kept separate as it uses complex calc/min */
+.ticket-container {
+  --design-width: 480;
+  --max-width: 768px;
+  --actual-width: min(100vw, var(--max-width));
+  --font-scale: calc(var(--actual-width) / var(--design-width) * 16);
+  
+  font-size: var(--font-scale);
+  width: var(--actual-width);
+  aspect-ratio: var(--aspect-ratio, 1 / 1.4142);
+  background-color: white;
+  box-sizing: border-box;
+  padding: 1.25em;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0.5em 2em rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .ticket-container {
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "title": "HORS-CARTE #1",
+  "venue": "THE GOOSE",
+  "date": "27/03/2026",
+  "lineup": [
+    { "name": "HUGO LX", "qty": "1" },
+    { "name": "SUNNI D", "qty": "1" },
+    { "name": "STARVIN' ARVIN", "qty": "1" },
+    { "name": "BORIS", "qty": "1" }
+  ],
+  "footerTitle": "HORS-CARTE",
+  "orderDue": "10PM"
+}
